@@ -14,8 +14,23 @@ ssh-copy-id -f "-o IdentityFile <PATH TO PEM FILE>" ubuntu@<INSTANCE-PUBLIC-IP>
 - ubuntu@<INSTANCE-IP>: This is the username (ubuntu) and the IP address of the remote server you want to access.
 
 ### Using Password 
-
-- Go to the file `/etc/ssh/sshd_config.d/60-cloudimg-settings.conf`
+(if your vm has alredy provisioned with username and passwd)
+connect to vm using ssh azureuser@128.24.117.89 and passwd 
+- Go to the file sudo vim`/etc/ssh/sshd_config
 - Update `PasswordAuthentication yes`
-- Restart SSH -> `sudo systemctl restart ssh`
+- Restart SSH -> `sudo systemctl restart ssh'
+- then do ssh-copy-id azureuser@128.24.117.89
+- give passwd of it 'yadav@123456'
+- then logout and again try ssh azureuser@128.24.117.89  you be able to connect your vm without passwd
+
+- (if your vm has provisioned with ssh key)
+- connect to vm using ssh -i path azureuser@128.24.117.89
+- Go to the file sudo vim`/etc/ssh/sshd_config
+- Update `PasswordAuthentication yes`
+- Restart SSH -> `sudo systemctl restart ssh'
+- then create passwd by using sudo passwd username
+- give new passwd
+- then do ssh-copy-id azureuser@128.24.117.89
+- give passwd of it 'yadav@123456'
+- then logout and again try ssh azureuser@128.24.117.89  you be able to connect your vm without passwd
 
