@@ -34,3 +34,19 @@ connect to vm using ssh azureuser@128.24.117.89 and passwd
 - give passwd of it 'yadav@123456'
 - then logout and again try ssh azureuser@128.24.117.89  you be able to connect your vm without passwd
 
+
+### control node and manage node configuration cmds
+### control node
+ssh-keygen
+ls ~/.ssh/
+cat ~/.ssh/id_ed25519.pub
+ls -l
+vim inventory.ini
+
+### manage node
+mkdir -p ~/.ssh
+vim ~/.ssh/authorized_keys (past code of cat ~/.ssh/id_ed25519.pub )
+chmod 600 ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+
+Try ADAC Cmd: ansible -i inventory.ini -m ping webservers
