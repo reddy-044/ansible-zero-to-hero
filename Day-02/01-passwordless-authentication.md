@@ -13,7 +13,7 @@ ssh-copy-id -f "-o IdentityFile <PATH TO PEM FILE>" ubuntu@<INSTANCE-PUBLIC-IP>
 - "-o IdentityFile <PATH TO PEM FILE>": This option specifies the identity file (private key) to use for the connection. The -o flag passes this option to the underlying ssh command.
 - ubuntu@<INSTANCE-IP>: This is the username (ubuntu) and the IP address of the remote server you want to access.
 
-### Using Password 
+### Using Password 1
 (if your vm has alredy provisioned with username and passwd)
 connect to vm using ssh azureuser@128.24.117.89 and passwd 
 - Go to the file sudo vim`/etc/ssh/sshd_config
@@ -22,7 +22,7 @@ connect to vm using ssh azureuser@128.24.117.89 and passwd
 - then do ssh-copy-id azureuser@128.24.117.89
 - give passwd of it 'yadav@123456'
 - then logout and again try ssh azureuser@128.24.117.89  you be able to connect your vm without passwd
-
+### Using Password 2
 - (if your vm has provisioned with ssh key)
 - connect to vm using ssh -i path azureuser@128.24.117.89
 - Go to the file sudo vim`/etc/ssh/sshd_config
