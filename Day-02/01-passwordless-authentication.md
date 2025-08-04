@@ -49,7 +49,7 @@ vim ~/.ssh/authorized_keys (past code of cat ~/.ssh/id_ed25519.pub )
 chmod 600 ~/.ssh/authorized_keys
 chmod 700 ~/.ssh
 
-Try ADAC Cmd: ansible -i inventory.ini -m ping webservers
+Try ADHOC Cmd: ansible -i inventory.ini -m ping webservers
 
 
 
