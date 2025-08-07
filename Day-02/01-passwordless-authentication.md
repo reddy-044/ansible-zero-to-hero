@@ -54,7 +54,9 @@ ssh -i ~/.ssh/your-private-key azureuser@<target-vm-public-ip>
 Then on target VM:
 mkdir -p ~/.ssh
 vim ~/.ssh/authorized_keys
-# Paste the key you copied from control VM
+
+Paste the key you copied from control VM
+
 chmod 600 ~/.ssh/authorized_keys
 chmod 700 ~/.ssh
 Now, the Control VM can access the Target VM without password.
