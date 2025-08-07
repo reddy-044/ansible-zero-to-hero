@@ -1,61 +1,75 @@
 # How to setup Passwordless Authentication
 
-## EC2 Instances
 
-### Using Public Key
+### Passwordless SSH Setup Between Control Node and Managed Node (or)  Setting up SSH Key-Based Authentication
+ IF VM IS CREATED WITH PASSWORD :
+ 
+STEP 1: SSH into Control VM 
+ssh azureuser@<control-vm-public-ip>
 
-```
-ssh-copy-id -f "-o IdentityFile <PATH TO PEM FILE>" ubuntu@<INSTANCE-PUBLIC-IP>
-```
+STEP 2: Generate SSH key
+ssh-keygen -t ed25519
+Just press Enter 3 times
+This creates:
+Private key: ~/.ssh/id_ed25519
+Public key: ~/.ssh/id_ed25519.pub
 
-- ssh-copy-id: This is the command used to copy your public key to a remote machine.
-- -f: This flag forces the copying of keys, which can be useful if you have keys already set up and want to overwrite them.
-- "-o IdentityFile <PATH TO PEM FILE>": This option specifies the identity file (private key) to use for the connection. The -o flag passes this option to the underlying ssh command.
-- ubuntu@<INSTANCE-IP>: This is the username (ubuntu) and the IP address of the remote server you want to access.
+STEP 3: Copy the SSH key to the newly deployed VM
+ssh-copy-id azureuser@10.0.1.5
+Replace 10.0.1.5 with your new VM’s private IP
 
-### Using Password 1
-(if your vm has alredy provisioned with username and passwd)
-connect to vm using ssh azureuser@128.24.117.89 and passwd 
-- Go to the file sudo vim`/etc/ssh/sshd_config
-- Update `PasswordAuthentication yes`
-- Restart SSH -> `sudo systemctl restart ssh'
-- then do ssh-copy-id azureuser@128.24.117.89
-- give passwd of it 'yadav@123456'
-- then logout and again try ssh azureuser@128.24.117.89  you be able to connect your vm without passwd
-### Using Password 2
-- (if your vm has provisioned with ssh key)
-- connect to vm using ssh -i path azureuser@128.24.117.89
-- Go to the file sudo vim`/etc/ssh/sshd_config
-- Update `PasswordAuthentication yes`
-- Restart SSH -> `sudo systemctl restart ssh'
-- then create passwd by using sudo passwd username
-- give new passwd
-- then do ssh-copy-id azureuser@128.24.117.89
-- give passwd of it 'yadav@123456'
-- then logout and again try ssh azureuser@128.24.117.89  you be able to connect your vm without passwd
+STEP 4: Test SSH access from Control VM to Target VM
+ssh azureuser@10.0.1.5
+You should log in without a password
 
+ STEP 5: (Optional but Recommended) Disable password login on the Target VM
+After logging into web-vm:
+sudo vim /etc/ssh/sshd_config
 
-### control node and manage node configuration cmds
-### control node
-ssh-keygen
-ls ~/.ssh/
+PasswordAuthentication no
+PermitRootLogin no
+Save and exit (:wq)
+
+Then restart SSH:
+sudo systemctl restart ssh
+
+### Passwordless SSH Setup Between Control Node and Managed Node (or)  Setting up SSH Key-Based Authentication
+IF VM IS CREATED WITH SSH KEY:
+
+STEP 1: SSH into Control VM 
+ssh azureuser@<control-vm-public-ip>
+
+STEP 2: Generate SSH key
+ssh-keygen -t ed25519
+Just press Enter 3 times
+This creates:
+Private key: ~/.ssh/id_ed25519
+Public key: ~/.ssh/id_ed25519.pub
+
+Step 3: On Control VM – View your public key
 cat ~/.ssh/id_ed25519.pub
-ls -l
-vim inventory.ini
 
-### manage node
+Step 4: SSH into target VM from your laptop (if you can):
+ssh -i ~/.ssh/your-private-key azureuser@<target-vm-public-ip>
+Then on target VM:
 mkdir -p ~/.ssh
-vim ~/.ssh/authorized_keys (past code of cat ~/.ssh/id_ed25519.pub )
+vim ~/.ssh/authorized_keys
+# Paste the key you copied from control VM
 chmod 600 ~/.ssh/authorized_keys
 chmod 700 ~/.ssh
+Now, the Control VM can access the Target VM without password.
 
-Try ADHOC Cmd: ansible -i inventory.ini -m ping webservers
+#### in real world we use jumpserver for login to other vms and in jump server we install ansible and terraform for configuration and deployments so:
+
+If you create a VM using Terraform and inject the jump server's public key, you can connect from the jump server without a password. No need to manually create .ssh or authorized_keys — Terraform handles it. Just use ssh azureuser@<vm-ip> from the jump server if the key matches.
+admin_ssh_key {
+    username   = "azureuser"
+    public_key = file("/home/azureuser/.ssh/id_ed25519.pub")  # Jump server's public key
+  }
 
 
 
-
-
-#######
+#######Try ADHOC Cmd: ansible -i inventory.ini -m ping webservers
 
 Module	🧠 What It Does (Simple)	💻 Example Command
 1️⃣	command	- Run any Linux command (no pipes or vars)	- ansible all -m command -a "uptime"
