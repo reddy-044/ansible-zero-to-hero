@@ -81,6 +81,8 @@ Module	🧠 What It Does (Simple)	💻 Example Command
 5️⃣	yum	 - Install packages in RHEL/CentOS (Red Hat)	ansible all -m yum -a "name=httpd state=present"  --become
 6️⃣	apt	- Install packages in Ubuntu/Debian -	ansible all -m apt -a "name=nginx state=present" --become
 7️⃣	service	Start, stop, restart services like nginx, httpd	ansible all -m service -a "name=nginx state=restarted"
+to stod start ansible all -i inventory.ini -m systemd -a "name=nginx state=started(stopped) enabled=yes" --become
+
 8️⃣	user - Create or delete Linux users - ansible all -m user -a "name=testuser state=present"
 9️⃣	authorized_key - 	Add your public SSH key to a server	- ansible all -m authorized_key -a "user=azureuser key='{{ lookup('file', '~/.ssh/id_rsa.pub') }}'"
 🔟	setup -	Show system details like RAM, CPU, IP -	ansible all -m setup
