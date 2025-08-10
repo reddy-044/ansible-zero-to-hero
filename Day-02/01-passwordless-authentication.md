@@ -78,8 +78,8 @@ Module	🧠 What It Does (Simple)	💻 Example Command
 2️⃣	shell - 	Run Linux command with pipes or redirection	- `ansible all -m shell -a "cat /etc/passwd
 3️⃣	copy -	Copy a file from your system to VM -	ansible all -m copy -a "src=/tmp/a.txt dest=/home/azureuser/"
 4️⃣	file -Create/delete a file or folder -	ansible all -m file -a "path=/tmp/test.txt state=absent"
-5️⃣	yum	 - Install packages in RHEL/CentOS (Red Hat)	ansible all -m yum -a "name=httpd state=present"
-6️⃣	apt	- Install packages in Ubuntu/Debian -	ansible all -m apt -a "name=nginx state=present"
+5️⃣	yum	 - Install packages in RHEL/CentOS (Red Hat)	ansible all -m yum -a "name=httpd state=present"  --become
+6️⃣	apt	- Install packages in Ubuntu/Debian -	ansible all -m apt -a "name=nginx state=present" --become
 7️⃣	service	Start, stop, restart services like nginx, httpd	ansible all -m service -a "name=nginx state=restarted"
 8️⃣	user - Create or delete Linux users - ansible all -m user -a "name=testuser state=present"
 9️⃣	authorized_key - 	Add your public SSH key to a server	- ansible all -m authorized_key -a "user=azureuser key='{{ lookup('file', '~/.ssh/id_rsa.pub') }}'"
